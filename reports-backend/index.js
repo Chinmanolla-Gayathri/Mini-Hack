@@ -33,11 +33,14 @@ const normalize = (v) => {
   return s;
 };
 
-const getPronouns = (gender, overrides = {}) => ({
-  he_she: overrides.he_she || (gender === "female" ? "she" : gender === "other" ? "they" : "he"),
-  him_her: overrides.him_her || (gender === "female" ? "her" : gender === "other" ? "them" : "him"),
-  his_her: overrides.his_her || (gender === "female" ? "her" : gender === "other" ? "their" : "his"),
-});
+const getPronouns = (gender, overrides = {}) => {
+  const o = overrides || {};
+  return {
+    he_she: o.he_she || (gender === "female" ? "she" : gender === "other" ? "they" : "he"),
+    him_her: o.him_her || (gender === "female" ? "her" : gender === "other" ? "them" : "him"),
+    his_her: o.his_her || (gender === "female" ? "her" : gender === "other" ? "their" : "his"),
+  };
+};
 
 // Helper for Requirement 7: Consistent Updated Terminology
 const getUpdatedLevel = (score) => {
@@ -77,10 +80,29 @@ const buildReplacements = (body) => {
     // Scores and Updated Terminology (Req 7)
     "«Information»": normalize(body.Information) || "N/A",
     "«Information_Level»": getUpdatedLevel(body.Information),
+    "«Comprehension»": normalize(body.Comprehension) || "N/A",
     "«Comprehension_Level»": getUpdatedLevel(body.Comprehension),
+    "«Arithmetic»": normalize(body.Arithmetic) || "N/A",
     "«Arithmetic_Level»": getUpdatedLevel(body.Arithmetic),
+    "«Similarities»": normalize(body.Similarities) || "N/A",
     "«Similarities_Level»": getUpdatedLevel(body.Similarities),
-    "«Vocabulary_Level»": getUpdatedLevel(body.Vocabulary || body.DigitSpan),
+    "«DigitVocabScore»": normalize(body.Vocabulary || body.DigitSpan) || "N/A",
+    "«DigitVocabLabel»": body.verbalChoice === "vocabulary" ? "Vocabulary" : "Digit Span",
+    "«Digit_Span_Level»": getUpdatedLevel(body.Vocabulary || body.DigitSpan),
+
+    "«Picture_Completion»": normalize(body.Picture_Completion) || "N/A",
+    "«Picture_Completion_Level»": getUpdatedLevel(body.Picture_Completion),
+    "«Block_Design»": normalize(body.Block_Design) || "N/A",
+    "«Block_Design_Level»": getUpdatedLevel(body.Block_Design),
+    "«Object_Assembly»": normalize(body.Object_Assembly) || "N/A",
+    "«Object_Assembly_Level»": getUpdatedLevel(body.Object_Assembly),
+    "«Coding»": normalize(body.Coding) || "N/A",
+    "«Coding_Level»": getUpdatedLevel(body.Coding),
+    "«Mazes»": normalize(body.Mazes) || "N/A",
+    "«Mazes_Level»": getUpdatedLevel(body.Mazes),
+
+    "«suggests»": getUpdatedLevel(body.verbalQuotient),
+    "«Points»": Math.abs(Number(body.performanceQuotient || 0) - Number(body.verbalQuotient || 0)),
     "«Overall_Level»": getUpdatedLevel(body.overallQuotient),
     "«performance_quotient_Level»": getUpdatedLevel(body.performanceQuotient),
 
@@ -91,6 +113,9 @@ const buildReplacements = (body) => {
     // Requirement 5 & 8: NIMHANS Display & Summary
     "«nimhans_display»": body.showNimhans === "true" || body.showNimhans === true ? "block" : "none",
     "«Summery»": body.summary || "",
+    "«Recomodations»": body.recommend1 || "",
+    "«Recomodations_2»": body.recommend2 || "",
+    "«Recomodations_3»": body.recommend3 || "",
     "«Final_Level»": getUpdatedLevel(body.overallQuotient),
 
     // Pronouns
@@ -140,9 +165,9 @@ app.post("/download-preview-pdf", upload.none(), async (req, res) => {
     }
 
     const browser = await puppeteer.launch({
-      args: isWindows ? [] : chromium.args,
+      args: isWindows ? ['--no-sandbox', '--disable-setuid-sandbox'] : chromium.args,
       executablePath: execPath,
-      headless: isWindows ? "new" : chromium.headless,
+      headless: true,
     });
 
     const page = await browser.newPage();

@@ -13,7 +13,7 @@ const TabForm = () => {
     register,
     watch,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     control,
     setValue,
     setError,
@@ -161,6 +161,10 @@ const TabForm = () => {
               control={control}
               setActiveTab={setActiveTab}
               handleSubmit={handleSubmit(onSubmit)}
+              getValues={getValues}
+              setValue={setValue}
+              isValid={isValid}
+              trigger={trigger}
             />
           )}
         </form>
