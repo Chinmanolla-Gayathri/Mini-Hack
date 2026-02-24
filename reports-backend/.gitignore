@@ -1,0 +1,6 @@
+/node_modules
+.env
+
+iq_conversion_6_years.json
+iq_conversion_7_years.json
+iq_conversion_9_years.json

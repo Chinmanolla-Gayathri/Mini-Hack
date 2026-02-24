@@ -1,0 +1,67 @@
+/* App.css */
+:root {
+  --primary-red: #9b1c1c; /* Define primary red color */
+  --light-gray: #f1f1f1;
+  --medium-gray: #e5e5e5;
+  --dark-gray: #333333;
+  --text-gray: #666666;
+}
+
+/* Global focus styles for inputs, selects, and textareas */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none !important; /* Remove default outline */
+  border-color: var(--primary-red) !important; /* Red border on focus */
+  box-shadow: 0 0 0 4px rgba(155, 28, 28, 0.2) !important; /* Red ring on focus */
+}
+
+/* Ensure react-select control also follows focus style */
+.react-select-container .react-select__control--is-focused {
+  outline: none !important; /* Remove default outline */
+  border-color: var(--primary-red) !important; /* Red border on focus */
+  box-shadow: 0 0 0 4px rgba(155, 28, 28, 0.2) !important; /* Red ring on focus */
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
